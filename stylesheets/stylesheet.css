@@ -453,6 +453,7 @@ span.full_name
 .joke_message
 {
   font-family: Courier;
+  text-align: center;
 }
 
 .am-wrapper{
