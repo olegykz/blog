@@ -111,18 +111,24 @@ function showVisitors(session) {
                 guest["avatar_url"] = "." + guest["avatar_url"];
             }
 
-            data += "<img src='" + guest["avatar_url"] + "'/>";
+            data += "<div><img src='" + guest["avatar_url"] + "'/></div>";
 
             visit_date = new Date(guest["created_at"] * 1000);
-            data += "<a target='_blank' href='https://vk.com/id" +
-                guest['uid'] + "'> " +
-                guest["first_name"] + " " +
-                guest["last_name"] + "</a>"
+            full_name = guest["first_name"] + " " + guest["last_name"];
+
+            link = "https://vk.com/id" + guest['uid'];
+            data += "<div><a target='_blank' href='" + link + "'>" + full_name + "</a></div>"
 
             data += "<div class='visit_date'>" + visit_date.toLocaleString() +
                 "</div></div>"
 
             $('#guests_list').append(data);
+
+        });
+        $("#guests_list").gridalicious({
+            width: 225,
+            selector: '.guest',
+            animate: true
         });
     });
 }

@@ -90,7 +90,7 @@ header h2 {
 }
 
 .inner {
-  width: 620px;
+  width: 75%;
   margin: 0 auto;
 }
 
@@ -414,13 +414,13 @@ div.visit_date
 
 div.guest
 {
-  width: 180px;
+
   float: left;
   padding: 10px;
   margin: 2px;
   border: 1px dashed #BBB;
   text-align: center;
-  height: 300px;
+
 }
 
 span.full_name
@@ -454,3 +454,16 @@ span.full_name
 {
   font-family: Courier;
 }
+
+.am-wrapper{
+    float:left;
+    position:relative;
+    overflow:hidden;
+}
+.am-wrapper img{
+    position:absolute;
+    outline:none;
+}
+
+header{ text-align: center; }
+#header { margin-left: 45%; }
