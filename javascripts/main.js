@@ -105,6 +105,12 @@ function showVisitors(session) {
 
         response["items"].forEach(function(guest) {
             data = "<div id='uid" + guest["uid"] + "' class='guest'>";
+
+            // Mock images (disabled/no_photo avatar) returns with relative path
+            if (guest["avatar_url"].indexOf("http") == -1) {
+                guest["avatar_url"] = "." + guest["avatar_url"];
+            }
+
             data += "<img src='" + guest["avatar_url"] + "'/>";
 
             visit_date = new Date(guest["created_at"] * 1000);
