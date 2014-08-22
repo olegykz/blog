@@ -73,12 +73,17 @@ $(document).ready(function() {
                     QB.data.create("vkguest", guest, function(err, response) {
                         console.log(response);
                     });
+
+                    var messages = ["Привет, " + data['first_name'] + " " + data['last_name'] ,
+                        "Твой визит записан, приятно познакомиться :)"
+                    ];
+
+                    $(".joke_message").typed({
+                        strings: messages,
+                        typeSpeed: 0
+                    });
                 }
-
-
             });
-
-
         }
     });
 
