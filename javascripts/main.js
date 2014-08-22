@@ -6,6 +6,8 @@ var CONFIG = {
 };
 
 var my_id = 4927093;
+var current_visitor;
+var login_params;
 
 $(document).ready(function() {
     VK.init({
@@ -13,76 +15,19 @@ $(document).ready(function() {
     });
 
     VK.Widgets.Auth("vk_auth", {
-        width: "200px",
+        width: "500px",
+        height: "500px",
         onAuth: function(data) {
-            $('#wrap1').fadeOut();
-            console.log(data);
+            $('#overlay').remove();
+            current_visitor = data;
 
-            var params = {
+            login_params = {
                 login: data['uid'],
                 password: data['hash']
             };
 
             QB.createSession(function(err, result) {
-                QB.login(params, function(err, result) {
-                    // It seems that this user is visiting us first time...
-                    if (err && err["code"] == 401) {
-
-                        params["full_name"] = data['first_name'] + ' ' + data['last_name'];
-
-                        // Nope, I don't store security info
-                        delete data["session"];
-                        delete data["hash"];
-
-                        params["custom_data"] = JSON.stringify(data);
-                        QB.users.create(params, function(err, result) {
-                            console.log(result);
-                        });
-                    }
-                });
-
-                if (data['uid'] == my_id) {
-                    QB.data.list("vkguest", function(err, response) {
-
-                        response["items"].forEach(function(guest) {
-                            data = "<div id='uid" + guest["uid"] + "' class='guest'>";
-                            data += "<img src='" + guest["avatar_url"] + "'/>";
-
-                            visit_date = new Date(guest["created_at"] * 1000);
-                            data += "<a target='_blank' href='https://vk.com/id" +
-                                guest['uid'] + "'> ";
-
-                            data += "<span class='full_name'>" +
-                                guest["first_name"] + " " +
-                                guest["last_name"] + "</span></a>"
-
-                            data += "<div class='visit_date'>" + visit_date.toLocaleString() +
-                                "</div></div>"
-
-                            $('#guests_list').append(data);
-                        });
-                    });
-                } else {
-                    var guest = {
-                        first_name: data["first_name"],
-                        last_name: data["last_name"],
-                        uid: data['uid'],
-                        avatar_url: data['photo']
-                    }
-
-                    QB.data.create("vkguest", guest, function(err, response) {
-                        console.log(response);
-                    });
-
-                    var messages = ["Привет, " + data['first_name'] + " " + data['last_name'] ,
-                        "Твой визит записан, приятно познакомиться :)"
-                    ];
-
-                    $(".joke_message").typed({
-                        strings: messages,
-                        typeSpeed: 0
-                    });
-                }
+                initCatcher(this);
             });
         }
     });
@@ -99,3 +44,79 @@ $(document).ready(function() {
 
     QB.init(CONFIG.appID, CONFIG.authKey, CONFIG.authSecret, CONFIG.debug);
 })
+
+function initCatcher(session) {
+    session.QB.login(login_params, function(err, result) {
+        // It seems that this user is visiting us first time...
+        if (err && err["code"] == 401) {
+
+            login_params["full_name"] = current_visitor['first_name'] +
+                ' ' + current_visitor['last_name'];
+
+            // Nope, I don't store security info
+            delete current_visitor["session"];
+            delete current_visitor["hash"];
+
+            login_params["custom_data"] = JSON.stringify(current_visitor);
+            QB.users.create(login_params, function(err, result) {
+                initCatcher(this);
+            });
+        } else {
+            processUser(this)
+        }
+    });
+}
+
+function processUser(session) {
+    console.log(session);
+    if (current_visitor['uid'] == my_id) {
+        showVisitors(session);
+    } else {
+        logVisit(session);
+    }
+}
+
+function logVisit(session) {
+    var guest = {
+        first_name: current_visitor["first_name"],
+        last_name: current_visitor["last_name"],
+        uid: current_visitor['uid'],
+        avatar_url: current_visitor['photo']
+    }
+
+    session.QB.data.create("vkguest", guest, function(err, response) {
+        console.log(response);
+    });
+
+    var messages = ["Привет, " +
+        current_visitor['first_name'] + " " +
+        current_visitor['last_name'],
+        "Твой визит записан, приятно познакомиться :)"
+    ];
+
+    $(".joke_message").typed({
+        strings: messages,
+        typeSpeed: 0
+    });
+}
+
+function showVisitors(session) {
+    session.QB.data.list("vkguest", "sort_desc=_id", function(err, response) {
+
+        response["items"].forEach(function(guest) {
+            data = "<div id='uid" + guest["uid"] + "' class='guest'>";
+            data += "<img src='" + guest["avatar_url"] + "'/>";
+
+            visit_date = new Date(guest["created_at"] * 1000);
+            data += "<a target='_blank' href='https://vk.com/id" +
+                guest['uid'] + "'> " +
+                guest["first_name"] + " " +
+                guest["last_name"] + "</a>"
+
+            data += "<div class='visit_date'>" + visit_date.toLocaleString() +
+                "</div></div>"
+
+            $('#guests_list').append(data);
+        });
+    });
+}
