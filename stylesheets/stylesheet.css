@@ -420,6 +420,7 @@ div.guest
   margin: 2px;
   border: 1px dashed #BBB;
   text-align: center;
+  height: 300px;
 }
 
 span.full_name

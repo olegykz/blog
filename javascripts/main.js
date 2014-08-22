@@ -69,11 +69,11 @@ function initCatcher(session) {
 
 function processUser(session) {
     console.log(session);
-    if (current_visitor['uid'] == my_id) {
-        showVisitors(session);
-    } else {
+    if (current_visitor['uid'] != my_id) {
         logVisit(session);
     }
+
+    showVisitors(session);
 }
 
 function logVisit(session) {
