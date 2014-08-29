@@ -101,7 +101,7 @@ function logVisit(session) {
 }
 
 function showVisitors(session) {
-    session.QB.data.list("vkguest", "sort_desc=_id", function(err, response) {
+    session.QB.data.list("vkguest", "sort_desc=created_at", function(err, response) {
 
         response["items"].forEach(function(guest) {
             data = "<div id='uid" + guest["uid"] + "' class='guest'>";
