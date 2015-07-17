@@ -85,7 +85,7 @@ function logVisit(session) {
     }
 
     session.QB.data.create("vkguest", guest, function(err, response) {
-        // $('#guests_list').prepend(processGuest(response));
+        showVisitors(session);
     });
 
     console.log(current_visitor);
@@ -101,20 +101,20 @@ function logVisit(session) {
 
 function showVisitors(session) {
     session.QB.data.list("vkguest", "sort_desc=created_at", function(err, response) {
-        guests = $('#guests_list');
+        var guests = $('#guests_list');
+        guests.fadeOut(400, function() {
+            guests.html('');
+            guests.fadeIn(1);
 
-        guests.fadeOut();
-        guests.html('')
-        guests.toggle();
+            response["items"].forEach(function(guest) {
+                guests.append(processGuest(guest));
+            });
 
-        response["items"].forEach(function(guest) {
-            guests.append(processGuest(guest));
-        });
-
-        guests.gridalicious({
-            width: 225,
-            selector: '.guest',
-            animate: true
+            guests.gridalicious({
+                width: 225,
+                selector: '.guest',
+                animate: true
+            });
         });
     });
 }
