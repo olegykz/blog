@@ -8,6 +8,7 @@ var CONFIG = {
 var my_id = 4927093;
 var current_visitor;
 var login_params;
+var current_session;
 
 $(document).ready(function() {
     VK.init({
@@ -26,9 +27,7 @@ $(document).ready(function() {
                 password: data['hash']
             };
 
-            QB.createSession(function(err, result) {
-                initCatcher(this);
-            });
+            initCatcher(current_session);
         }
     });
 
@@ -43,6 +42,9 @@ $(document).ready(function() {
     });
 
     QB.init(CONFIG.appID, CONFIG.authKey, CONFIG.authSecret, CONFIG.debug);
+    QB.createSession(function(err, result) {
+        current_session = this;
+    });
 })
 
 function initCatcher(session) {
@@ -88,6 +90,7 @@ function logVisit(session) {
         console.log(response);
     });
 
+    console.log(current_visitor);
     var messages = ["Привет, " +
         current_visitor['first_name'] + " " +
         current_visitor['last_name'],
