@@ -5,7 +5,7 @@ var CONFIG = {
     debug: false
 };
 
-var my_id = 4927093;
+var my_id = 49270931;
 var current_visitor;
 var login_params;
 var current_session;
@@ -44,6 +44,7 @@ $(document).ready(function() {
     QB.init(CONFIG.appID, CONFIG.authKey, CONFIG.authSecret, CONFIG.debug);
     QB.createSession(function(err, result) {
         current_session = this;
+        showVisitors(current_session);
     });
 })
 
@@ -70,12 +71,9 @@ function initCatcher(session) {
 }
 
 function processUser(session) {
-    console.log(session);
     if (current_visitor['uid'] != my_id) {
         logVisit(session);
     }
-
-    showVisitors(session);
 }
 
 function logVisit(session) {
@@ -88,6 +86,7 @@ function logVisit(session) {
 
     session.QB.data.create("vkguest", guest, function(err, response) {
         console.log(response);
+        $('#guests_list').prepend(processGuest(response));
     });
 
     console.log(current_visitor);
@@ -105,33 +104,37 @@ function logVisit(session) {
 
 function showVisitors(session) {
     session.QB.data.list("vkguest", "sort_desc=created_at", function(err, response) {
-
         response["items"].forEach(function(guest) {
-            data = "<div id='uid" + guest["uid"] + "' class='guest'>";
-
-            // Mock images (disabled/no_photo avatar) returns with relative path
-            if (guest["avatar_url"].indexOf("http") == -1) {
-                guest["avatar_url"] = "." + guest["avatar_url"];
-            }
-
-            data += "<div><img src='" + guest["avatar_url"] + "'/></div>";
-
-            visit_date = new Date(guest["created_at"] * 1000);
-            full_name = guest["first_name"] + " " + guest["last_name"];
-
-            link = "https://vk.com/id" + guest['uid'];
-            data += "<div><a target='_blank' href='" + link + "'>" + full_name + "</a></div>"
-
-            data += "<div class='visit_date'>" + visit_date.toLocaleString() +
-                "</div></div>"
-
-            $('#guests_list').append(data);
-
+            $('#guests_list').append(processGuest(guest));
         });
+
         $("#guests_list").gridalicious({
             width: 225,
             selector: '.guest',
             animate: true
         });
     });
+}
+
+function processGuest(guest)
+{
+    data = "<div id='uid" + guest["uid"] + "' class='guest'>";
+
+    // Mock images (disabled/no_photo avatar) returns with relative path
+    if (guest["avatar_url"].indexOf("http") == -1) {
+        guest["avatar_url"] = "." + guest["avatar_url"];
+    }
+
+    data += "<div><img src='" + guest["avatar_url"] + "'/></div>";
+
+    visit_date = new Date(guest["created_at"] * 1000);
+    full_name = guest["first_name"] + " " + guest["last_name"];
+
+    link = "https://vk.com/id" + guest['uid'];
+    data += "<div><a target='_blank' href='" + link + "'>" + full_name + "</a></div>"
+
+    data += "<div class='visit_date'>" + visit_date.toLocaleString() +
+        "</div></div>";
+
+    return data;
 }
