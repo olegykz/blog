@@ -85,16 +85,13 @@ function logVisit(session) {
     }
 
     session.QB.data.create("vkguest", guest, function(err, response) {
-        console.log(response);
-        $('#guests_list').prepend(processGuest(response));
+        // $('#guests_list').prepend(processGuest(response));
     });
 
     console.log(current_visitor);
-    var messages = ["Привет, " +
+    var messages = ["Привет,^1000 " +
         current_visitor['first_name'] + " " +
-        current_visitor['last_name'],
-        "Твой визит записан, приятно познакомиться :)"
-    ];
+        current_visitor['last_name']];
 
     $(".joke_message").typed({
         strings: messages,
@@ -104,11 +101,17 @@ function logVisit(session) {
 
 function showVisitors(session) {
     session.QB.data.list("vkguest", "sort_desc=created_at", function(err, response) {
+        guests = $('#guests_list');
+
+        guests.fadeOut();
+        guests.html('')
+        guests.toggle();
+
         response["items"].forEach(function(guest) {
-            $('#guests_list').append(processGuest(guest));
+            guests.append(processGuest(guest));
         });
 
-        $("#guests_list").gridalicious({
+        guests.gridalicious({
             width: 225,
             selector: '.guest',
             animate: true
