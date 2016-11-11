@@ -382,10 +382,11 @@ footer a:hover {
 }
 #wrap1 {
   overflow: hidden;
-  width: 180px;
-  height: 25px;
+  width: 300px;
+  height: 300px;
   opacity: 0.5;
   position: absolute;
+  color: red;
   z-index: 101;
 
 }
