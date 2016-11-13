@@ -16,7 +16,10 @@ function getOut() {
 }
 
 $(document).ready(function() {
-    if(Cookies.get('state') == 'liked' && document.location.hash == '') getOut();
+    if(Cookies.get('state') == 'liked' && window.location.hash == '')
+    {
+        getOut();
+    }
 
     VK.init({apiId: 5726540});
 
