@@ -18,6 +18,7 @@ function getOut() {
 $(document).ready(function() {
     if(Cookies.get('state') == 'liked' && window.location.hash == '')
     {
+        debugger;
         getOut();
     }
 
