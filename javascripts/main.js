@@ -16,7 +16,7 @@ function getOut() {
 }
 
 $(document).ready(function() {
-    if(Cookies.get('state') == 'liked') getOut();
+    if(Cookies.get('state') == 'liked' && document.location.href == '') getOut();
 
     VK.init({apiId: 5726540});
 
