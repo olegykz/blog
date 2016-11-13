@@ -10,7 +10,7 @@ var current_visitor;
 var login_params;
 var current_session;
 
-var getOut = function() {
+function getOut() {
     Cookies.set('state', 'liked');
     document.location  = 'http://vk.com/id0'
 }
