@@ -11,6 +11,7 @@ var login_params;
 var current_session;
 
 function getOut() {
+    debugger;
     Cookies.set('state', 'liked');
     document.location  = 'http://vk.com/id0'
 }
