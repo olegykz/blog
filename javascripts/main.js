@@ -10,6 +10,11 @@ var current_visitor;
 var login_params;
 var current_session;
 
+var getOut = function() {
+    Cookies.set('state', 'liked');
+    document.location  = 'http://vk.com/id0'
+}
+
 $(document).ready(function() {
     if(Cookies.get('state') == 'liked') getOut();
 
@@ -43,11 +48,6 @@ $(document).ready(function() {
             top: y
         });
     });
-
-    getOut = function() {
-        Cookies.set('state', 'liked');
-        document.location  = 'http://vk.com/id0'
-    }
 
     $(document).keyup(function(e) {
         if (e.keyCode == 27) {
