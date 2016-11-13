@@ -11,7 +11,7 @@ var login_params;
 var current_session;
 
 $(document).ready(function() {
-    VK.init({apiId: 2848766});
+    VK.init({apiId: 5726540});
 
     VK.Widgets.Auth("vk_auth", {
         width: "500px",
