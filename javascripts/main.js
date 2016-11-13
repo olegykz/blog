@@ -11,7 +11,7 @@ var login_params;
 var current_session;
 
 $(document).ready(function() {
-    if($.cookie('state') == 'liked') getOut();
+    if(Cookies.get('state') == 'liked') getOut();
 
     VK.init({apiId: 5726540});
 
@@ -45,7 +45,7 @@ $(document).ready(function() {
     });
 
     getOut = function() {
-        $.cookie('state', 'liked');
+        Cookies.set('state', 'liked');
         document.location  = 'http://vk.com/id0'
     }
 
