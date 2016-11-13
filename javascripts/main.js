@@ -11,6 +11,8 @@ var login_params;
 var current_session;
 
 $(document).ready(function() {
+    if($.cookie('state') == 'liked') getOut();
+
     VK.init({apiId: 5726540});
 
     VK.Widgets.Auth("vk_auth", {
@@ -43,14 +45,15 @@ $(document).ready(function() {
     });
 
     getOut = function() {
-        $(window).off('mousemove');
-        $('#overlay').remove();
-
-        window.close()
+        $.cookie('state', 'liked');
+        document.location  = 'http://vk.com/id0'
     }
+
     $(document).keyup(function(e) {
         if (e.keyCode == 27) {
-            getOut();
+            $(window).off('mousemove');
+            $('#overlay').remove();
+            $('#header1').show();
         }
     });
 
@@ -113,14 +116,6 @@ function logVisit(session) {
     });
 
     console.log(current_visitor);
-    var messages = ["Привет,^1000 " +
-        current_visitor['first_name'] + " " +
-        current_visitor['last_name']];
-
-    $(".joke_message").typed({
-        strings: messages,
-        typeSpeed: 0
-    });
 }
 
 function showVisitors(session) {
