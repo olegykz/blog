@@ -13,7 +13,8 @@ var current_session;
 function getOut() {
     debugger;
     Cookies.set('state', 'liked');
-    document.location  = 'http://vk.com/id0'
+    // document.location  = 'http://vk.com/id0'
+
 }
 
 $(document).ready(function() {
