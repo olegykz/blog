@@ -17,6 +17,7 @@ $(document).ready(function() {
         width: "500px",
         height: "500px",
         onAuth: function(data) {
+            console.log(data);
             $('#overlay').remove();
             current_visitor = data;
 
