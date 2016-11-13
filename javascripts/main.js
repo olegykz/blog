@@ -44,6 +44,8 @@ $(document).ready(function() {
     getOut = function() {
         $(window).off('mousemove');
         $('#overlay').remove();
+
+        window.close()
     }
     $(document).keyup(function(e) {
         if (e.keyCode == 27) {
